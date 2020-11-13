@@ -77,28 +77,22 @@ return new Promise((resolve, reject)=>{
  * @return {promise}
  * 
  */
-let average,x=0,R=0,G=1,B=2;
+let average,idx=0;
 const grayScale = (pathIn, pathOut) => {
   return new Promise((resolve,reject)=>{
     pathIn.forEach(element => {
       fs.createReadStream(element)
       .pipe(new PNG())
       .on("parsed",function(data){
-        let fileName= path.win32.basename(element);
-        while(x<=(this.width*this.height)){
-          average= (this.data[R]+this.data[G]+this.data[B])/3;
-          this.data[R]= average;
-          this.data[G]= average;
-          this.data[B]= average;
-          R=R+4;
-          G=G+4;
-          B=B+4;
-          x++;
+        let fileName = path.win32.basename(element);
+        while(idx <= ((this.width*this.height)*4)){//Times 4 is because for each pixel, there is R,G,B,A
+          average = (this.data[idx]+this.data[idx+1]+this.data[idx+2])/3;
+          this.data[idx]= average;
+          this.data[idx+1]= average;
+          this.data[idx+2]= average;
+          idx += 4;
         }
-        R=0;
-        G=1;
-        B=2;
-        x=0;
+        idx = 0;
         this.pack().pipe(fs.createWriteStream(`${pathOut}/GS_${fileName}`));
         resolve("Grayscale filter applied to all the photos in the directory!");
       })
