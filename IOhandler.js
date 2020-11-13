@@ -77,6 +77,7 @@ return new Promise((resolve, reject)=>{
  * @return {promise}
  * 
  */
+
 let average,idx=0;
 const grayScale = (pathIn, pathOut) => {
   return new Promise((resolve,reject)=>{
